@@ -4,10 +4,11 @@ import { actions } from "../redux"
 import "../styles/movies.css"
 import { connect } from 'react-redux'
 function Movies (props) {
-    const { movies, page, pageSize, getMovies, ...rest } = props
+    const { movies, page, pageSize, getMovies, moviesFiltered, ...rest } = props
     const startIndex = pageSize*(page - 1)
     let endIndex
-    if(pageSize ===1 || pageSize >= movies.length) {
+    let moviesData = moviesFiltered.length === 0 ? movies : moviesFiltered
+    if(pageSize ===1 || pageSize >= moviesData.length) {
         endIndex = movies.length
     } else {
         endIndex = startIndex + pageSize
@@ -17,13 +18,14 @@ function Movies (props) {
       }, [getMovies]);
         return (
             <div className="moviesContainer">   
-                { movies.slice(startIndex, endIndex).map((movie, index) => (<MoviesCard key={index} {...movie}  {...rest}/>))}   
+                { moviesData.slice(startIndex, endIndex).map((movie, index) => (<MoviesCard key={index} {...movie}  {...rest}/>))}   
             </div>)
 }
-const mapStateToProps = ({ movies, page, pageSize }) => ({
+const mapStateToProps = ({ movies, page, pageSize, moviesFiltered }) => ({
     movies,
     page,
-    pageSize
+    pageSize,
+    moviesFiltered,
 })
 const mapDispatchToProps = (dispatch) => ({
     getMovies: actions.getMovies(dispatch),

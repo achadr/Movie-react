@@ -16,7 +16,7 @@ import { useMovieCardStyles } from './styles'
 
 export default function RecipeReviewCard(props) {
   const classes = useMovieCardStyles();
-  const {  likes = 0, dislikes = 0, category= '', title='', dislikeMovie, likeMovie, id, deleteMovie, imageUrl ='', releaseDate='' } = props
+  const {  likes = 0, dislikes = 0, category= '', title='', dislikeMovie, likeMovie, id, deleteMovie, imageUrl ='', releaseDate='', appreciation } = props
   return (
     <Card className={classes.root}>
       <CardHeader
@@ -44,13 +44,13 @@ export default function RecipeReviewCard(props) {
       </CardContent>
       <CardActions className={classes.actions}>
         <IconButton aria-label="Like" onClick={() => likeMovie(id)}>
-          <ThumbUpIcon />
+          <ThumbUpIcon color={appreciation === "like" ? "primary": "default"} />
           <Typography variant="body2" color="textSecondary" component="p" style={{ margin: "5px"}}>
          {`${likes}`}
         </Typography>
         </IconButton>
         <IconButton aria-label="Dislike" onClick={() =>  dislikeMovie(id)}>
-          <ThumbDownIcon />
+          <ThumbDownIcon color={appreciation === "dislike" ? "secondary": "default"} />
           <Typography variant="body2" color="textSecondary" component="p" style={{ margin: "5px"}} >
           {`${dislikes}`}
         </Typography>

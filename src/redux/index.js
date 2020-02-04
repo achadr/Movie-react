@@ -79,17 +79,75 @@ const ACTION_HANDLER= {
     }),
     'DISLIKE_MOVIE': (state, action) =>({
         ...state,
-        movies: state.movies.map(m => m.id === action.movieId ? { ...m, dislikes: m.dislikes + 1, appreciationActionDone: true, } : m),
+        movies: state.movies.map(m => {
+            if(m.id === action.movieId) {
+                if(m.appreciation === 'dislike') {
+                    return { 
+                        ...m, 
+                        dislikes: m.dislikes - 1,
+                        appreciationDone: false,
+                        appreciation: undefined,
+                    }
+                }
+                if(m.appreciation === 'like') {
+                    return { 
+                        ...m, 
+                        dislikes: m.dislikes + 1,
+                        likes: m.likes -1,
+                        appreciationDone: true,
+                        appreciation: 'dislike',
+                    }
+                }
+                return { 
+                    ...m, 
+                    dislikes: m.dislikes + 1,
+                    appreciationDone: true,
+                    appreciation: 'dislike',
+                }
+                
+            }
+            return m
+        }),
     }),  
     'LIKE_MOVIE': (state, action) => ({
         ...state,
-        movies: state.movies.map(m => m.id === action.movieId ? { ...m, likes: m.likes + 1, appreciationActionDone: true} : m),
+        movies: state.movies.map(m => {
+            if(m.id === action.movieId) {
+                if(m.appreciation === 'like') {
+                    return { 
+                        ...m, 
+                        likes: m.likes - 1,
+                        appreciationDone: false,
+                        appreciation: undefined,
+                    }
+                }
+                if(m.appreciation === 'dislike') {
+                    return { 
+                        ...m, 
+                        likes: m.likes + 1,
+                        dislikes: m.dislikes -1,
+                        appreciationDone: true,
+                        appreciation: 'like',
+                    }
+                }
+                return { 
+                    ...m, 
+                    likes: m.likes + 1,
+                    appreciationDone: true,
+                    appreciation: 'like',
+                }
+            }
+            return m
+        }
+        ),
     }),
     'DELETE_MOVIE': (state, action) => ({
         ...state,
         deletedMovies: [ ...state.deletedMovies, action.movieId],
         movies: state.movies.filter(m => m.id !== action.movieId),
-        categoriesSelected: [ ...new Set(state.movies.filter(m => m.id !== action.movieId).map(m => m.category))].filter(c => state.categoriesSelected.includes(c)),
+        moviesFiltered: state.moviesFiltered.filter(m => m.id !== action.movieId),
+        categories: [...new Set(state.movies.filter(m => m.id !== action.movieId).map(m => m.category))],
+        categoriesSelected: [...new Set(state.moviesFiltered.filter(m => m.id !== action.movieId).map(m => m.category))]
     }),
    'NEXT_PAGE': (state, action) => ({
             ...state,
@@ -102,16 +160,18 @@ const ACTION_HANDLER= {
     'PAGE_SIZE':(state, action) => ({
         ...state,
         pageSize: action.pageSize,
+        page: 1,
         }),
     'CHANGE_CATEGORY': (state, action) => ({
         ...state,
         categoriesSelected: action.categories,
-        movies: action.categories.length === 0 ? state.movies : state.movies.filter(m => action.categories.includes(m.category))
+        moviesFiltered: action.categories.length === 0 ? state.movies : state.movies.filter(m => action.categories.includes(m.category))
     })
 }
 
 const defaultState = {
     movies: [],
+    moviesFiltered: [],
     page: 1,
     pageSize: 1,
     categoriesSelected: [],
