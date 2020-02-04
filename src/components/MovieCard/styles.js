@@ -10,7 +10,7 @@ export const useMovieCardStyles = makeStyles(theme => ({
     },
     media: {
       height: 10,
-      paddingTop: '56.25%', // 16:9
+      paddingTop: '100%', // 16:9
     },
     expand: {
       transform: 'rotate(0deg)',

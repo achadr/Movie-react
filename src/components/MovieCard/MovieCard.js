@@ -10,14 +10,13 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp'
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Jauge from './Jauge'
-import movieImage from "../../media/picture1.jpeg"
 import { useMovieCardStyles } from './styles'
 
 
 
 export default function RecipeReviewCard(props) {
   const classes = useMovieCardStyles();
-  const {  likes = 0, dislikes = 0, category= '', title='', dislikeMovie, likeMovie, id, deleteMovie } = props
+  const {  likes = 0, dislikes = 0, category= '', title='', dislikeMovie, likeMovie, id, deleteMovie, imageUrl ='', releaseDate='' } = props
   return (
     <Card className={classes.root}>
       <CardHeader
@@ -30,11 +29,11 @@ export default function RecipeReviewCard(props) {
         title={<Typography variant="title" component="h3" nowrap >
         {`${title}`}
        </Typography>}
-        subheader="September 14, 2016"
+        subheader={releaseDate}
       />
       <CardMedia
         className={classes.media}
-        image={movieImage}
+        image={imageUrl}
         title={title}
       />
       <CardContent>
